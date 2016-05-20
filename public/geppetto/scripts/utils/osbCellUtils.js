@@ -102,3 +102,21 @@ var showSelection = function(csel) {
 // Commands
 initialiseControlPanel();
 addSuggestionsToSpotlight();
+
+
+var showExecutionDialog = function(callback){
+	var formCallback = callback;
+
+	var formWidget = G.addWidget(8);
+	formWidget.generateForm({experimentName:{type:'Text', title: 'Experiment Name'},timeStep:{type:'Number', title: 'Time Step (s)'},lenght:{type:'Number', title: 'Length (s)'},simulator:{type:'Select', title: 'Simulator', options: [{ val: 'neuronSimulator', label: 'Neuron' }, { val: 'lemsSimulator', label: 'jLems' }, { val: 'neuronNSGSimulator', label: 'Neuron on NSG' }]},numberProcessors:{type:'Number', title: 'Number of Processors'}}, 'Execute');
+	formWidget.setData({'experimentName': Project.getActiveExperiment().getName(),timeStep: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getTimeStep(),lenght: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getLength(),simulator:'neuronNSGSimulator', numberProcessors: 1});
+
+	var innerForm = formWidget.getForm();
+	innerForm.on('timeStep:change', function(form, timeStep, extra) {console.log('Attribute changed to "' + timeStep.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='timeStep']").html(timeStep.getValue());});
+	innerForm.on('lenght:change', function(form, lenght, extra) {console.log('Attribute changed to "' + lenght.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='length']").html(lenght.getValue());});
+	innerForm.on('numberProcessors:change', function(form, numberProcessors, extra) {console.log('Attribute changed to "' + numberProcessors.getValue() + '".');Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].setSimulatorParameter('numberProcessors', numberProcessors.getValue());});
+	innerForm.on('simulator:change', function(form, simulator, extra) {console.log('Attribute changed to "' + simulator.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='simulatorId']").html(simulator.getValue());});
+	innerForm.on('submit', function(event) {event.preventDefault();console.log('Submitting');GEPPETTO.Flows.showSpotlightForRun(formCallback); formWidget.destroy();});
+};
+
+GEPPETTO.Flows.addCompulsoryAction('showExecutionDialog', GEPPETTO.Resources.RUN_FLOW);
