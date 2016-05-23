@@ -112,10 +112,11 @@ var showExecutionDialog = function(callback){
 	formWidget.setData({'experimentName': Project.getActiveExperiment().getName(),timeStep: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getTimeStep(),lenght: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getLength(),simulator:Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getSimulator(), numberProcessors: 1});
 
 	var innerForm = formWidget.getForm();
-	innerForm.on('timeStep:change', function(form, timeStep, extra) {console.log('Attribute changed to "' + timeStep.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='timeStep']").html(timeStep.getValue());});
-	innerForm.on('lenght:change', function(form, lenght, extra) {console.log('Attribute changed to "' + lenght.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='length']").html(lenght.getValue());});
-	innerForm.on('numberProcessors:change', function(form, numberProcessors, extra) {console.log('Attribute changed to "' + numberProcessors.getValue() + '".');Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].setSimulatorParameter('numberProcessors', numberProcessors.getValue());});
-	innerForm.on('simulator:change', function(form, simulator, extra) {console.log('Attribute changed to "' + simulator.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='simulatorId']").html(simulator.getValue());});
+	innerForm.on('experimentName:change', function(form, experimentName, extra) {console.log('Attribute changed to "' + experimentName.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='name']").html(experimentName.getValue()).blur();});
+	innerForm.on('timeStep:change', function(form, timeStep, extra) {console.log('Attribute changed to "' + timeStep.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='timeStep']").html(timeStep.getValue()).blur();});
+	innerForm.on('lenght:change', function(form, lenght, extra) {console.log('Attribute changed to "' + lenght.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='length']").html(lenght.getValue()).blur();});
+	innerForm.on('numberProcessors:change', function(form, numberProcessors, extra) {console.log('Attribute changed to "' + numberProcessors.getValue() + '".');Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].setSimulatorParameter('numberProcessors', numberProcessors.getValue()).blur();});
+	innerForm.on('simulator:change', function(form, simulator, extra) {console.log('Attribute changed to "' + simulator.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='simulatorId']").html(simulator.getValue()).blur();});
 	innerForm.on('submit', function(event) {event.preventDefault();console.log('Submitting');GEPPETTO.Flows.showSpotlightForRun(formCallback); formWidget.destroy();});
 };
 
