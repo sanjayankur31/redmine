@@ -109,7 +109,7 @@ var showExecutionDialog = function(callback){
 
 	var formWidget = G.addWidget(8);
 	formWidget.generateForm({experimentName:{type:'Text', title: 'Experiment Name'},timeStep:{type:'Number', title: 'Time Step (s)'},lenght:{type:'Number', title: 'Length (s)'},simulator:{type:'Select', title: 'Simulator', options: [{ val: 'neuronSimulator', label: 'Neuron' }, { val: 'lemsSimulator', label: 'jLems' }, { val: 'neuronNSGSimulator', label: 'Neuron on NSG' }]},numberProcessors:{type:'Number', title: 'Number of Processors'}}, 'Execute');
-	formWidget.setData({'experimentName': Project.getActiveExperiment().getName(),timeStep: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getTimeStep(),lenght: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getLength(),simulator:'neuronNSGSimulator', numberProcessors: 1});
+	formWidget.setData({'experimentName': Project.getActiveExperiment().getName(),timeStep: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getTimeStep(),lenght: Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getLength(),simulator:Project.getActiveExperiment().simulatorConfigurations[window.Instances[0].getId()].getSimulator(), numberProcessors: 1});
 
 	var innerForm = formWidget.getForm();
 	innerForm.on('timeStep:change', function(form, timeStep, extra) {console.log('Attribute changed to "' + timeStep.getValue() + '".');$("#experimentsOutput").find(".activeExperiment").find("td[field='timeStep']").html(timeStep.getValue());});
