@@ -4,6 +4,7 @@
      var repourl="<%= getHttpRepositoryURL(@project) %>";
      var repopath="<%= getHttpRepositoryPath(@project.repository) %>";
      var neuroml2files = <%= raw getNML2Files(@project.repository) %>;
+     var h5files = <%= raw getH5Files(@project.repository) %>;
      var swcfiles = <%= raw getSWCFiles(@project.repository) %>;
      var jsonfiles = <%= raw getJSONFiles(@project.repository) %>;
      var synapsefiles = <%= raw getSynapsesFiles() %>;
@@ -17,6 +18,7 @@
     </script>
     <% if isProjectOrShowcase(@project) %>
         <% @neuroml2files = getNML2Files(@project.repository) %>
+        <% @h5files = getH5Files(@project.repository) %>
         <% @swcfiles = getSWCFiles(@project.repository) %>
         <% @sjsonfiles = getJSONFiles(@project.repository) %>
         <% @repourl=getHttpRepositoryURL(@project) %>
@@ -42,7 +44,7 @@
     <div class="badges">
         <%= getEndorsementBadge(@project) %>
         <%= getCurationBadge(@project, "pull-right", tipPlace="bottom") %>
-	<% if @repourl.include? "github" %>
+	<% if (not @repourl.nil?) && (@repourl.include? "github") %>
 	    <span class="gh-badges">
 		<% @repoID = @repourl.split('/')[-2..-1].join('/') %>
 		<% {'issues' => 'https://github.com/'+@repoID+'/issues',
