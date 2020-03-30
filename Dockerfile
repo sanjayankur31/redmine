@@ -69,8 +69,6 @@ RUN bundle exec rake redmine:load_default_data
 ARG SERVER_IP
 ENV SERVER_IP=${SERVER_IP:-"http://localhost:10083/"}
 
-# COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
-# COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
 RUN sed -i -E "s~^serverIP:.*$~serverIP: $SERVER_IP~g" ${REDMINE_INSTALL_DIR}/config/props.yml
 # RUN sed -i.orig -e "s/^geppettoIP:.*$/geppettoIP: $GEPPETTO_IP/g" ${REDMINE_INSTALL_DIR}/config/props.yml
 
