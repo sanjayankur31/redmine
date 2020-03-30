@@ -1,3 +1,8 @@
+# Containerfile to run a local instance of redmine
+# Currently uses the sqlite backend for simplicity
+# Reference: https://www.redmine.org/projects/redmine/wiki/RedmineInstall/308
+# For queries, please contact Ankur Sinha (sanjayankur31@github).
+
 FROM ubuntu:xenial-20180705 AS ubuntu-xenial-20180705
 
 RUN apt-get update -qq \
@@ -13,7 +18,12 @@ RUN apt-get update -qq \
 
 FROM ubuntu:xenial-20180705
 
+# Change this to the location of your repo on localhost
 WORKDIR /home/asinha/Documents/02_Code/00_mine/2020-OSB/redmine/
+
+# Test that this works
+RUN pwd
+RUN ls
 
 ENV RUBY_VERSION=2.3 \
     REDMINE_VERSION=3.4.6 \
@@ -50,10 +60,6 @@ RUN apt-get update -qq \
  && gem install -q --no-rdoc --no-ri bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
-COPY ./ ./
-
-RUN ls config/
-
 RUN bundle install --without development test
 
 RUN bundle exec rake generate_secret_token
@@ -65,7 +71,7 @@ ENV SERVER_IP=${SERVER_IP:-"http://localhost:10083/"}
 
 # COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 # COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
-RUN sed -i.orig -e "s/^serverIP:.*$/serverIP: $SERVER_IP/g" ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i -E "s~^serverIP:.*$~serverIP: $SERVER_IP~g" ${REDMINE_INSTALL_DIR}/config/props.yml
 # RUN sed -i.orig -e "s/^geppettoIP:.*$/geppettoIP: $GEPPETTO_IP/g" ${REDMINE_INSTALL_DIR}/config/props.yml
 
 # RUN mkdir -pv ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
@@ -78,4 +84,6 @@ RUN sed -i.orig -e "s/^serverIP:.*$/serverIP: $SERVER_IP/g" ${REDMINE_INSTALL_DI
 #RUN SELECT value FROM custom_values WHERE custom_field_id=14 and value!='';  
 # RUN chown -R redmine:redmine /home/svnsvn
 
-CMD ["bundle", "exec", "rails", "server", "webrick", "-e", "production"]
+# Let the entry point be the shell so that one can make changes and run the server as necessary
+# https://www.freecodecamp.org/news/painless-rails-development-environment-setup-with-docker/
+ENTRYPOINT ["/bin/bash"]
