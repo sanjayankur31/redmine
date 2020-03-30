@@ -50,3 +50,5 @@ plugins/redmine_github_hook
 
 .DS_Store
 /public/geppetto/tmp
+
+Gemfile.lock
