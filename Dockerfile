@@ -65,8 +65,8 @@ ENV SERVER_IP=${SERVER_IP:-"http://localhost:10083/"}
 
 # COPY config/props.yml ${REDMINE_INSTALL_DIR}/config/props.yml
 # COPY config/configuration.yml ${REDMINE_INSTALL_DIR}/config/configuration.yml
-RUN sed -i -e 's~serverIP:~serverIP: '$SERVER_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
-# RUN sed -i -e 's~geppettoIP:~geppettoIP: '$GEPPETTO_IP'~g' ${REDMINE_INSTALL_DIR}/config/props.yml
+RUN sed -i.orig -e "s/^serverIP:.*$/serverIP: $SERVER_IP/g" ${REDMINE_INSTALL_DIR}/config/props.yml
+# RUN sed -i.orig -e "s/^geppettoIP:.*$/geppettoIP: $GEPPETTO_IP/g" ${REDMINE_INSTALL_DIR}/config/props.yml
 
 # RUN mkdir -pv ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
 # RUN chown -R redmine:redmine ${REDMINE_INSTALL_DIR}/public/geppetto/tmp
